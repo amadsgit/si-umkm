@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Notifikasi extends Model
+{
+    public $timestamps = false;
+
+    protected $table = 'notifikasi';
+
+    protected $fillable = [
+        'user_id',
+        'judul',
+        'pesan',
+        'tipe',
+        'is_read',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
+        'created_at' => 'datetime',
+    ];
+
+    // Relasi ke user penerima notifikasi
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}
