@@ -51,6 +51,24 @@
             <i class="ph ph-chat-dots text-xl"></i> Jadwal Konsultasi
         </a>
 
+        {{-- MENU UNTUK KEPALA UPTD --}}
+        @elseif(Auth::user()->role === 'kepala_uptd')
+        <a href="{{ route('dashboard.kepalauptd.index') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('dashboard.kepalauptd.index') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
+            <i class="ph ph-gauge text-xl"></i> Dashboard
+        </a>
+        <a href="{{ route('dashboard.kepalauptd.profil') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('dashboard.kepalauptd.profil') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
+            <i class="ph ph-user-circle text-xl"></i> Profil Kepala UPTD
+        </a>
+        <a href="{{ route('dashboard.kepalauptd.laporan') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('dashboard.kepalauptd.laporan') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
+            <i class="ph ph-chat-dots text-xl"></i> Laporan & Rekapitulasi
+        </a>
+
         {{-- MENU UNTUK ROLE ADMIN --}}
         @elseif(Auth::user()->role === 'admin')
         <a href="{{ route('dashboard.admin') }}"

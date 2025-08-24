@@ -25,7 +25,7 @@
             {{-- Data User --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block mb-2 text-sm font-semibold text-gray-700">Username</label>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">Nama</label>
                     <input type="text" name="username" value="{{ old('username', $konsultan->user->username) }}"
                         class="w-full bg-gray-100 rounded-xl border @error('username') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition">
                     @error('username') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror

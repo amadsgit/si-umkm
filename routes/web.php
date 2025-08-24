@@ -137,7 +137,12 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
     });
 
     // role kepala UPTD
-    Route::middleware(['auth', 'role:kepalaUPTD'])->group(function () {
+    Route::middleware(['auth', 'role:kepala_uptd'])->group(function () {
         Route::get('/dashboard/kepala-uptd', [DashboardKepalaUPTDController::class, 'index'])->name('dashboard.kepalauptd.index');
+        Route::get('/dashboard/kepala-uptd/profil', [DashboardKepalaUPTDController::class, 'profil'])->name('dashboard.kepalauptd.profil');
+        Route::get('/dashboard/kepala-uptd/{id}/edit', [DashboardKepalaUPTDController::class, 'edit'])->name('dashboard.kepalauptd.edit');
+        Route::put('/dashboard/kepala-uptd/{id}', [DashboardKepalaUPTDController::class, 'update'])->name('dashboard.kepalauptd.update');
+
+        Route::get('/dashboard/kepala-uptd/laporan', [DashboardKepalaUPTDController::class, 'laporan'])->name('dashboard.kepalauptd.laporan');
     });
 });
