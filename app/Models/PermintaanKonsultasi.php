@@ -44,6 +44,11 @@ class PermintaanKonsultasi extends Model
         return $this->hasOne(JadwalKonsultasi::class, 'permintaan_id');
     }
 
+    // public function feedback()
+    // {
+    //     return $this->morphOne(Feedback::class, 'target');
+    // }
+
     // Relasi ke hasil konsultasi lewat jadwal
     public function hasilKonsultasi()
     {

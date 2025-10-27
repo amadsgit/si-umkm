@@ -17,7 +17,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Nama
                         Lengkap</label>
                     <input type="text" name="name" value="{{ old('name') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('name') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('name') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="Contoh: Siti Aminah" autofocus required>
                     @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -28,7 +28,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('email') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('email') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="nama@email.com" required>
                     @error('email')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -39,7 +39,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">No. HP</label>
                     <input type="text" name="phone" value="{{ old('phone') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('phone') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('phone') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="08xxxxxxxxxx" required>
                     @error('phone')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -50,7 +50,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Password</label>
                     <input type="password" name="password"
-                        class="w-full bg-gray-100 rounded-xl border @error('password') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('password') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="********" required>
                     @error('password')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -62,7 +62,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Konfirmasi
                         Password</label>
                     <input type="password" name="password_confirmation"
-                        class="w-full bg-gray-100 rounded-xl border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border border-gray-300 focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="********" required>
                 </div>
 
@@ -70,7 +70,7 @@
                 <div class="md:col-span-2">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Usaha</label>
                     <input type="text" name="nama_usaha" value="{{ old('nama_usaha') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('nama_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('nama_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="Contoh: Keripik Subang" required>
                     @error('nama_usaha')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -82,7 +82,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Bidang
                         Usaha</label>
                     <input type="text" name="bidang_usaha" value="{{ old('bidang_usaha') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('bidang_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('bidang_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="Kuliner, Fashion, dll" required>
                     @error('bidang_usaha')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -94,7 +94,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Kategori
                         Usaha</label>
                     <select name="kategori_usaha"
-                        class="w-full bg-gray-100 rounded-xl border @error('kategori_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition" required>
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('kategori_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition" required>
                         <option value="">-- Pilih --</option>
                         <option value="mikro" {{ old('kategori_usaha')=='mikro' ? 'selected' : '' }}>Mikro</option>
                         <option value="kecil" {{ old('kategori_usaha')=='kecil' ? 'selected' : '' }}>Kecil</option>
@@ -111,7 +111,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Tahun
                         Berdiri</label>
                     <input type="number" name="tahun_berdiri" value="{{ old('tahun_berdiri') }}"
-                        class="w-full bg-gray-100 rounded-xl border @error('tahun_berdiri') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('tahun_berdiri') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="Contoh: 2020" required>
                     @error('tahun_berdiri')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -123,7 +123,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Foto Profil
                         Usaha</label>
                     <input type="file" name="foto_profil"
-                        class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition @error('foto_profil') border-red-500 @enderror">
+                        class="w-full text-black file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 transition @error('foto_profil') border-red-500 @enderror">
                     @error('foto_profil')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -134,7 +134,7 @@
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat
                         Usaha</label>
                     <textarea name="alamat_usaha" rows="3"
-                        class="w-full bg-gray-100 rounded-xl border @error('alamat_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
+                        class="w-full text-black bg-gray-100 rounded-xl border @error('alamat_usaha') border-red-500 @else border-gray-300 @enderror focus:ring-emerald-500 focus:border-emerald-500 px-4 py-3 transition"
                         placeholder="Jl. Raya Subang No. 10 ..." required></textarea>
                     @error('alamat_usaha')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

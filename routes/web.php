@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\JenisPembinaanController;
 use App\Http\Controllers\Admin\TopikPembinaanController;
 use App\Http\Controllers\Admin\JadwalPembinaanController;
+use App\Http\Controllers\Admin\RiwayatKegiatanController;
 use App\Http\Controllers\Admin\TopikKonsultasiController;
 use App\Http\Controllers\Admin\JadwalKonsultasiController;
 use App\Http\Middleware\RedirectIfAuthenticatedToDashboard;
@@ -35,7 +36,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
-    // role admin
+    // ROLE ADMIN
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/dashboard/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
 
@@ -100,11 +101,14 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
 
         Route::get('/dashboard/admin/jadwal-pembinaan/{id}/peserta', [JadwalPembinaanController::class, 'peserta'])->name('admin.jadwal-pembinaan.peserta');
 
+        // riwayat kegiatan
+        Route::get('/dashboard/admin/riwayat-kegiatan-konsultasi', [RiwayatKegiatanController::class, 'IndexRiwayatKonsultasi'])->name('admin.riwayat-kegiatan.konsultasi');
+        Route::get('/dashboard/admin/riwayat-kegiatan-pembinaan', [RiwayatKegiatanController::class, 'IndexRiwayatPembinaan'])->name('admin.riwayat-kegiatan.pembinaan');
 
     });
 
 
-    // role umkm
+    // ROLE UMKM
     Route::middleware(['auth', 'role:umkm'])->group(function () {
         Route::get('/dashboard/umkm', [DashboardUmkmController::class, 'index'])->name('dashboard.umkm.index');
         Route::get('/dashboard/umkm/profil', [DashboardUmkmController::class, 'profil'])->name('dashboard.umkm.profil');
@@ -115,16 +119,30 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/dashboard/umkm/konsultasi/create', [UmkmKonsultasiController::class, 'create'])->name('dashboard.umkm.konsultasi.create');
         Route::post('/dashboard/umkm/konsultasi/store', [UmkmKonsultasiController::class, 'store'])->name('dashboard.umkm.konsultasi.store');
         Route::delete('/dashboard/admin/konsultasi/{id}/delete', [UmkmKonsultasiController::class, 'destroy'])->name('dashboard.umkm.konsultasi.cancel');
+        Route::prefix('dashboard/umkm/konsultasi')->name('dashboard.umkm.konsultasi.')->group(function () {
+            // Halaman feedback (form)
+            Route::get('/{id}/feedback', [UmkmKonsultasiController::class, 'feedbackForm'])
+                ->name('feedback');
+
+            // Submit feedback
+            Route::post('/{id}/feedback', [UmkmKonsultasiController::class, 'feedbackStore'])
+                ->name('feedback.store');
+        });
         
         Route::get('/dashboard/umkm/pembinaan', [UmkmPembinaanController::class, 'index'])->name('dashboard.umkm.pembinaan.index');
         Route::post('/dashboard/umkm/pembinaan/apply/{id}', [UmkmPembinaanController::class, 'apply'])->name('dashboard.umkm.pembinaan.apply');
         Route::get('/dashboard/umkm/pembinaan/list-kegiatan-pembinaan', [UmkmPembinaanController::class, 'listPembinaan'])->name('dashboard.umkm.pembinaan.listpembinaan');
         Route::post('/dashboard/umkm/pembinaan/absen/{id}', [UmkmPembinaanController::class, 'absen'])->name('dashboard.umkm.pembinaan.absen');
+        Route::prefix('dashboard/umkm/pembinaan')->name('dashboard.umkm.pembinaan.')->middleware(['auth'])->group(function () {
+            // Feedback Pembinaan
+            Route::get('/{id}/feedback', [UmkmPembinaanController::class, 'feedbackForm'])->name('feedback');
+            Route::post('/{id}/feedback', [UmkmPembinaanController::class, 'feedbackStore'])->name('feedback.store');
+        });
 
     });
 
 
-    // role konsultan
+    // ROLE KONSULTAN
     Route::middleware(['auth', 'role:konsultan'])->group(function () {
         Route::get('/dashboard/konsultan', [DashboardKonsultanController::class, 'index'])->name('dashboard.konsultan.index');
         Route::get('/dashboard/konsultan/profil', [DashboardKonsultanController::class, 'profil'])->name('dashboard.konsultan.profil');
@@ -136,13 +154,19 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::post('/hasil-konsultasi/{jadwalId}', [KonsultanKonsultasiController::class, 'simpanHasilKonsultasi'])->name('konsultan.hasil-konsultasi.simpan');
     });
 
-    // role kepala UPTD
+    // ROLE KEPALA UPTD
     Route::middleware(['auth', 'role:kepala_uptd'])->group(function () {
         Route::get('/dashboard/kepala-uptd', [DashboardKepalaUPTDController::class, 'index'])->name('dashboard.kepalauptd.index');
         Route::get('/dashboard/kepala-uptd/profil', [DashboardKepalaUPTDController::class, 'profil'])->name('dashboard.kepalauptd.profil');
         Route::get('/dashboard/kepala-uptd/{id}/edit', [DashboardKepalaUPTDController::class, 'edit'])->name('dashboard.kepalauptd.edit');
         Route::put('/dashboard/kepala-uptd/{id}', [DashboardKepalaUPTDController::class, 'update'])->name('dashboard.kepalauptd.update');
 
-        Route::get('/dashboard/kepala-uptd/laporan', [DashboardKepalaUPTDController::class, 'laporan'])->name('dashboard.kepalauptd.laporan');
+        Route::get('/dashboard/kepala-uptd/laporan', [DashboardKepalaUPTDController::class, 'laporanpembinaan'])->name('dashboard.kepalauptd.laporan');
+        Route::get('/dashboard/kepala-uptd/laporan-kegiatan-konsultasi', [DashboardKepalaUPTDController::class, 'laporankonsultasi'])->name('dashboard.kepalauptd.laporankonsultasi');
+
+        Route::get('/laporan/export/pembinaan', [DashboardKepalaUPTDController::class, 'exportPembinaan'])
+            ->name('laporan.export.pembinaan');
+        Route::get('/laporan/export/konsultasi', [DashboardKepalaUPTDController::class, 'exportKonsultasi'])
+            ->name('laporan.export.konsultasi');
     });
 });

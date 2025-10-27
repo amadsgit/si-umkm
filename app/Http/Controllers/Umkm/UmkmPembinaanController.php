@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Umkm;
 
-use Exception;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Feedback;
 use App\Models\JadwalPembinaan;
 use App\Models\PesertaPembinaan;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UmkmPembinaanController extends Controller
@@ -16,15 +15,16 @@ class UmkmPembinaanController extends Controller
     {
         $umkm = Auth::user()->umkm;
 
-        if (!$umkm) {
+        if (! $umkm) {
             return redirect()->back()->with('error', 'UMKM tidak ditemukan.');
         }
 
-        $jadwalPembinaanList = JadwalPembinaan::withCount('pesertaPembinaan') // <── jumlah peserta
+        $jadwalPembinaanList = JadwalPembinaan::withCount('pesertaPembinaan')
             ->whereDoesntHave('pesertaPembinaan', function ($query) use ($umkm) {
                 $query->where('umkm_id', $umkm->id);
             })
-            ->orderBy('tanggal', 'desc')
+            ->whereDate('tanggal', '>=', now()) // hanya tampilkan jadwal hari ini & yang akan datang
+            ->orderBy('tanggal', 'asc') // disarankan ubah ke ASC supaya urutan dari yang terdekat
             ->take(6)
             ->get();
 
@@ -34,7 +34,7 @@ class UmkmPembinaanController extends Controller
     public function apply($id)
     {
         $umkm = Auth::user()->umkm; // cek relasi user->umkm sudah ada atau belum
-        if (!$umkm) {
+        if (! $umkm) {
             return redirect()->back()->with('error', 'UMKM tidak ditemukan.');
         }
 
@@ -52,15 +52,14 @@ class UmkmPembinaanController extends Controller
 
         // Simpan ke tabel peserta_pembinaan
         PesertaPembinaan::create([
-            'pembinaan_id'    => $jadwal->id,
-            'umkm_id'         => $umkm->id,
-            'status_kehadiran'=> 'belum_absensi', // default
+            'pembinaan_id' => $jadwal->id,
+            'umkm_id' => $umkm->id,
+            'status_kehadiran' => 'belum_absensi', // default
         ]);
 
         return redirect()->route('dashboard.umkm.pembinaan.listpembinaan')
             ->with('success', 'Berhasil mendaftar ke pembinaan!');
     }
-
 
     public function listPembinaan()
     {
@@ -76,18 +75,20 @@ class UmkmPembinaanController extends Controller
             ->orderBy('jadwal_pembinaan.tanggal', 'desc')
             ->orderBy('jadwal_pembinaan.waktu_mulai', 'desc')
             ->select('peserta_pembinaan.*')
-            ->get();
+            ->paginate(5);
 
         $now = now();
 
         foreach ($pembinaanSaya as $peserta) {
             $p = $peserta->pembinaan;
-            if (! $p) continue;
+            if (! $p) {
+                continue;
+            }
 
             try {
                 // gabungkan tanggal + jam
-                $mulai   = \Carbon\Carbon::parse($p->tanggal . ' ' . $p->waktu_mulai);
-                $selesai = \Carbon\Carbon::parse($p->tanggal . ' ' . $p->waktu_selesai);
+                $mulai = \Carbon\Carbon::parse($p->tanggal.' '.$p->waktu_mulai);
+                $selesai = \Carbon\Carbon::parse($p->tanggal.' '.$p->waktu_selesai);
             } catch (\Exception $e) {
                 continue;
             }
@@ -99,9 +100,11 @@ class UmkmPembinaanController extends Controller
             }
         }
 
-        return view('dashboard.umkm.pembinaan.list', compact('pembinaanSaya'));
+        return view('dashboard.umkm.pembinaan.list', [
+            'pembinaanSaya' => $pembinaanSaya,
+            'user' => Auth::user(),
+        ]);
     }
-
 
     public function absen(Request $request, $id)
     {
@@ -123,5 +126,46 @@ class UmkmPembinaanController extends Controller
         return back()->with('success', 'Absensi berhasil disimpan!');
     }
 
+    public function feedbackForm($id)
+    {
+        $user = Auth::user();
 
+        $pembinaan = PesertaPembinaan::where('id', $id)
+            ->where('umkm_id', $user->umkm->id)
+            ->with('pembinaan')
+            ->firstOrFail();
+
+        return view('dashboard.umkm.pembinaan.feedback', compact('pembinaan'));
+    }
+
+    public function feedbackStore(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        $pembinaan = PesertaPembinaan::where('id', $id)
+            ->where('umkm_id', $user->umkm->id)
+            ->firstOrFail();
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'komentar' => 'nullable|string|max:500',
+        ]);
+
+        // Buat atau update feedback
+        Feedback::updateOrCreate(
+            [
+                'umkm_id' => $user->umkm->id,
+                'target_id' => $pembinaan->id,
+                'target_type' => 'pembinaan',
+            ],
+            [
+                'rating' => $request->rating,
+                'komentar' => $request->komentar,
+                'created_at' => now(),
+            ]
+        );
+
+        return redirect()->route('dashboard.umkm.pembinaan.listpembinaan')
+            ->with('success', 'Feedback pembinaan berhasil dikirim.');
+    }
 }

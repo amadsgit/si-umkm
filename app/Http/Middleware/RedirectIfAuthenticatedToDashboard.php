@@ -19,7 +19,7 @@ class RedirectIfAuthenticatedToDashboard
                     return redirect()->route('dashboard.umkm.index');
                 case 'konsultan':
                     return redirect()->route('dashboard.konsultan.index');
-                case 'kepalaUPTD':
+                case 'kepala_uptd':
                     return redirect()->route('dashboard.kepalauptd.index');
                 default:
                     Auth::logout();

@@ -3,20 +3,20 @@
 
     <div class="overflow-x-auto">
         <table class="min-w-full table-auto border divide-y divide-gray-200">
-            <thead class="bg-gray-100">
+            <thead class="bg-sky-500 text-white">
                 <tr>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">No</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Username</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Email</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">No. HP</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Role</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Last Login</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">No</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Username</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Email</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">No. HP</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Role</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Last Login</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
                 @forelse ($userList as $userItem)
                 <tr>
-                    <td class="px-4 py-2 text-sm text-gray-800">{{ $loop->iteration }}</td>
+                    <td class="px-4 py-2 text-sm text-gray-800">{{ $userList->firstItem() + $loop->index }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $userItem->username }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $userItem->email }}</td>
                     <td class="px-4 py-2 text-sm text-gray-800">{{ $userItem->phone ?? '-' }}</td>
@@ -35,5 +35,8 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-4 mb-4">
+            {{ $userList->links('vendor.pagination.tailwind') }}
+        </div>
     </div>
 </div>

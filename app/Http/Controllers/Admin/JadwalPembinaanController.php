@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\JenisPembinaan;
-use App\Models\TopikPembinaan;
-use App\Models\JadwalPembinaan;
-use App\Models\PesertaPembinaan;
 use App\Http\Controllers\Controller;
+use App\Models\JadwalPembinaan;
+use App\Models\JenisPembinaan;
+use App\Models\PesertaPembinaan;
+use App\Models\TopikPembinaan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class JadwalPembinaanController extends Controller
@@ -19,7 +19,7 @@ class JadwalPembinaanController extends Controller
         $jadwalPembinaanList = JadwalPembinaan::with(['creator', 'jenis', 'topik'])
             ->withCount('pesertaPembinaan') // hitung jumlah peserta
             ->latest()
-            ->paginate(2);
+            ->paginate(5);
 
         return view('dashboard.admin.jadwalpembinaan.index', compact('user', 'jadwalPembinaanList'));
     }
@@ -60,7 +60,6 @@ class JadwalPembinaanController extends Controller
         return redirect()->route('admin.jadwal-pembinaan.index')
             ->with('success', 'Jadwal pembinaan berhasil ditambahkan.');
     }
-
 
     public function edit($id)
     {
@@ -105,7 +104,6 @@ class JadwalPembinaanController extends Controller
             ->with('success', 'Jadwal pembinaan berhasil diperbarui.');
     }
 
-
     public function destroy($id)
     {
         $jadwalPembinaan = JadwalPembinaan::findOrFail($id);
@@ -132,5 +130,4 @@ class JadwalPembinaanController extends Controller
 
         return view('dashboard.admin.jadwalpembinaan.peserta', compact('jadwal', 'pesertaList'));
     }
-
 }

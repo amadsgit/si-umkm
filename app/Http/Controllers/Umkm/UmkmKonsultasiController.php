@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Umkm;
 
+use App\Models\Feedback;
 use Illuminate\Http\Request;
+use App\Models\TopikKonsultasi;
 use App\Http\Controllers\Controller;
 use App\Models\PermintaanKonsultasi;
-use App\Models\TopikKonsultasi;
 use Illuminate\Support\Facades\Auth;
 
 class UmkmKonsultasiController extends Controller
@@ -49,7 +50,7 @@ class UmkmKonsultasiController extends Controller
             'hasilKonsultasi'
         ])
         ->latest()
-        ->get();
+        ->paginate(3);
 
         // Permintaan yang ditolak
         $ditolakList = PermintaanKonsultasi::where('umkm_id', $user->umkm->id)
@@ -105,6 +106,50 @@ class UmkmKonsultasiController extends Controller
 
         return redirect()->route('dashboard.umkm.konsultasi.index')
             ->with('success', 'Permintaan konsultasi berhasil dibatalkan.');
+    }
+
+
+    public function feedbackForm($id)
+    {
+        $user = Auth::user();
+
+        $permintaan = PermintaanKonsultasi::where('id', $id)
+            ->where('umkm_id', $user->umkm->id)
+            ->with(['hasilKonsultasi', 'konsultan.user'])
+            ->firstOrFail();
+
+        return view('dashboard.umkm.konsultasi.feedback', compact('permintaan'));
+    }
+
+    public function feedbackStore(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        $permintaan = PermintaanKonsultasi::where('id', $id)
+            ->where('umkm_id', $user->umkm->id)
+            ->firstOrFail();
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'komentar' => 'nullable|string|max:500',
+        ]);
+
+        // Buat atau update feedback
+        Feedback::updateOrCreate(
+            [
+                'umkm_id' => $user->umkm->id,
+                'target_id' => $permintaan->id,
+                'target_type' => 'konsultan',
+            ],
+            [
+                'rating' => $request->rating,
+                'komentar' => $request->komentar,
+                'created_at' => now(),
+            ]
+        );
+
+        return redirect()->route('dashboard.umkm.konsultasi.index')
+                        ->with('success', 'Feedback berhasil dikirim.');
     }
 
 }

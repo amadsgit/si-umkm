@@ -58,7 +58,7 @@
                 }
                 }
             
-                // ambil komponen waktu dari waktu_mulai / waktu_selesai dengan aman
+                // ambil komponen waktu dari waktu_mulai / waktu_selesai
                 $mulaiHour = $mulaiMinute = $mulaiSecond = 0;
                 $selesaiHour = $selesaiMinute = $selesaiSecond = 0;
             
@@ -97,9 +97,33 @@
                 @endphp
             
                 <tr>
-                    <td class="border px-3 py-2 text-center">{{ $loop->iteration }}</td>
+                    <td class="border px-3 py-2 text-center">{{ $pembinaanSaya->firstItem() + $loop->index }}</td>
                     <td class="border px-3 py-2 font-semibold">
-                        {{ $item->pembinaan->judul ?? '-' }}
+                        {{ $item->pembinaan->judul ?? '-' }} <br>
+
+                        @php
+                        $feedbackPembinaan = \App\Models\Feedback::where('umkm_id', Auth::user()->umkm->id)
+                        ->where('target_id', $item->id)
+                        ->where('target_type', 'pembinaan')
+                        ->first();
+                        @endphp
+                        
+                        @if($feedbackPembinaan)
+                        <div class="mt-1 inline-flex items-center space-x-1">
+                            @for($i = 1; $i <= 5; $i++) @if($i <=$feedbackPembinaan->rating)
+                                <i class="ph ph-star text-yellow-400 text-lg font-bold"></i>
+                                @else
+                                <i class="ph ph-star text-gray-300 text-lg"></i>
+                                @endif
+                                @endfor
+                        </div>
+                        @elseif($waktuSelesai && $now->gt($waktuSelesai))
+                        {{-- tombol beri feedback hanya muncul kalau pembinaan sudah selesai --}}
+                        <a href="{{ route('dashboard.umkm.pembinaan.feedback', $item->id) }}"
+                            class="mt-1 inline-block px-3 py-1 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                            Beri Feedback
+                        </a>
+                        @endif
                     </td>
                     <td class="border px-3 py-2">
                         {{ \Illuminate\Support\Str::limit($item->pembinaan->deskripsi, 50) ?? '-' }}
@@ -162,6 +186,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-4 mb-4">
+            {{ $pembinaanSaya->links('vendor.pagination.tailwind') }}
+        </div>
     </div>
 
 

@@ -51,7 +51,7 @@
         <h2 class="text-xl font-bold text-emerald-600 mb-4">Konsultasi Dijadwalkan</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
-                <thead class="bg-gray-100">
+                <thead class="bg-emerald-500 text-white">
                     <tr>
                         <th class="px-3 py-2 border">No</th>
                         <th class="px-3 py-2 border">UMKM</th>
@@ -118,20 +118,23 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-gray-500 py-3">Tidak ada permintaan dijadwalkan.</td>
+                        <td colspan="6" class="text-center text-gray-500 py-3">Tidak ada permintaan dijadwalkan.</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
+            <div class="mt-4 mb-4">
+                {{ $konsultasiDijadwalkan->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </section>
 
     {{-- tabel konsultasi selesai --}}
     <section>
-        <h2 class="text-xl font-bold text-blue-600 mb-4">Konsultasi Yang Telah Selesai</h2>
+        <h2 class="text-xl font-bold text-blue-600 mb-4">Riwayat Konsultasi Selesai</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
-                <thead class="bg-gray-100">
+                <thead class="bg-blue-500 text-white">
                     <tr>
                         <th class="px-3 py-2 border">No</th>
                         <th class="px-3 py-2 border">UMKM</th>
@@ -145,7 +148,7 @@
                 <tbody>
                     @forelse($konsultasiSelesai as $item)
                     <tr>
-                        <td class="border px-3 py-2">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 border">{{ $konsultasiSelesai->firstItem() + $loop->index }}</td>
                         <td class="border px-3 py-2">{{ $item->umkm->nama_usaha }}</td>
                         <td class="border px-3 py-2">{{ $item->topik->nama_topik }}</td>
                         {{-- <td class="border px-3 py-2">{{ $item->konsultan->user->username ?? '-' }}</td> --}}
@@ -228,6 +231,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="mt-4 mb-4">
+                {{ $konsultasiSelesai->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </section>
 

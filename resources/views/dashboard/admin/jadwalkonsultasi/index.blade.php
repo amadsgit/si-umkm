@@ -26,7 +26,7 @@
 
     {{-- === 2. Permintaan Disetujui (Belum Selesai) === --}}
     <section>
-        <h2 class="text-xl font-bold text-emerald-600 mb-4">Konsultasi Disetujui</h2>
+        <h2 class="text-xl font-bold text-gray-600 mb-4">Konsultasi Disetujui</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
                 <thead class="bg-gray-100">
@@ -68,10 +68,10 @@
 
     {{-- === 3. Permintaan dijadwalkan=== --}}
     <section>
-        <h2 class="text-xl font-bold text-emerald-600 mb-4">Konsultasi Dijadwalkan</h2>
+        <h2 class="text-xl font-bold text-emerald-500 mb-4">Konsultasi Dijadwalkan</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
-                <thead class="bg-gray-100">
+                <thead class="bg-emerald-500 text-white">
                     <tr>
                         <th class="px-3 py-2 border">No</th>
                         <th class="px-3 py-2 border">UMKM</th>
@@ -145,43 +145,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-gray-500 py-3">Tidak ada permintaan dijadwalkan.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    {{-- === 4. Riwayat Selesai === --}}
-    <section>
-        <h2 class="text-xl font-bold text-gray-700 mb-4">Riwayat Konsultasi</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full border text-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-3 py-2 border">No</th>
-                        <th class="px-3 py-2 border">UMKM</th>
-                        <th class="px-3 py-2 border">Topik</th>
-                        <th class="px-3 py-2 border">Konsultan</th>
-                        <th class="px-3 py-2 border">Tanggal</th>
-                        <th class="px-3 py-2 border">Metode</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($selesai as $item)
-                    <tr>
-                        <td class="border px-3 py-2">{{ $loop->iteration }}</td>
-                        <td class="border px-3 py-2">{{ $item->umkm->nama_usaha }}</td>
-                        <td class="border px-3 py-2">{{ $item->topik->nama_topik }}</td>
-                        <td class="border px-3 py-2">{{ $item->konsultan->user->username ?? '-' }}</td>
-                        <td class="border px-3 py-2">{{ optional($item->jadwal)->tanggal ?? '-' }}</td>
-                        <td class="border px-3 py-2">{{ optional($item->jadwal)->metode ?
-                            ucfirst(optional($item->jadwal)->metode) : '-' }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="text-center text-gray-500 py-3">Tidak ada riwayat konsultasi.</td>
+                        <td colspan="7" class="text-center text-gray-500 py-3">Tidak ada permintaan dijadwalkan.</td>
                     </tr>
                     @endforelse
                 </tbody>

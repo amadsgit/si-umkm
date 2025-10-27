@@ -5,7 +5,7 @@
         <button @click="sidebarOpen = !sidebarOpen" class="md:hidden focus:outline-none">
             <i class="ph ph-list text-2xl"></i>
         </button>
-        <h1 class="text-xl font-semibold">Dashboard</h1>
+        <h1 class="text-xl font-semibold"></h1>
     </div>
 
     <!-- User Dropdown -->

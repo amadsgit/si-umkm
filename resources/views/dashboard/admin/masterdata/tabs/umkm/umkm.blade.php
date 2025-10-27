@@ -3,17 +3,17 @@
 
     <div class="overflow-x-auto">
         <table class="min-w-full table-auto border divide-y divide-gray-200">
-            <thead class="bg-gray-100">
+            <thead class="bg-sky-500 text-white">
                 <tr>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">No</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Foto</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nama Pemilik</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nama Usaha</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Bidang Usaha</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Alamat</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Tahun Berdiri</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Kategori</th>
-                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Aksi</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">No</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Foto</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Nama Pemilik</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Nama Usaha</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Bidang Usaha</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Alamat</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Tahun Berdiri</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Kategori</th>
+                    <th class="px-4 py-2 text-left text-sm font-semibold">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">

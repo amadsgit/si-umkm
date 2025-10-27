@@ -8,15 +8,15 @@
     </div>
 
     <table class="min-w-full table-auto border border-gray-200">
-        <thead class="bg-gray-100">
+        <thead class="bg-sky-500 text-white">
             <tr>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Foto</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Nama</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">NIP</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Jabatan</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Status</th>
-                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Aksi</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">No</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">Foto</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">Nama</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">NIP</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">Jabatan</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">Status</th>
+                <th class="px-4 py-2 text-left text-sm font-medium">Aksi</th>
             </tr>
         </thead>
         <tbody>

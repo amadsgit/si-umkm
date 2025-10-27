@@ -5,10 +5,13 @@ namespace App\Http\Controllers\KepalaUPTD;
 use App\Models\KepalaUPTD;
 use Illuminate\Http\Request;
 use App\Models\JadwalPembinaan;
+use App\Exports\PembinaanExport;
 use App\Models\JadwalKonsultasi;
+use App\Exports\KonsultasiExport;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardKepalaUPTDController extends Controller
@@ -110,7 +113,7 @@ class DashboardKepalaUPTDController extends Controller
     }
 
 
-    public function laporan()
+    public function laporanpembinaan() 
     {
         $user = Auth::user();
 
@@ -118,24 +121,49 @@ class DashboardKepalaUPTDController extends Controller
         $pembinaan = JadwalPembinaan::with(['jenis', 'topik', 'creator'])
             ->withCount('pesertaPembinaan')
             ->orderBy('tanggal', 'desc')
-            ->get();
+            ->paginate(5);
+
+        // Statistik singkat (total kegiatan)
+        $totalPembinaan = JadwalPembinaan::with(['jenis', 'topik', 'creator'])->count();
+        $totalKonsultasi = JadwalKonsultasi::with(['permintaan', 'hasilKonsultasi'])->count();
+
+        return view('dashboard.kepalauptd.laporanpembinaan', compact(
+            'user',
+            'pembinaan',
+            'totalPembinaan',
+            'totalKonsultasi'
+        ));
+    }
+
+    public function laporankonsultasi() 
+    {
+        $user = Auth::user();
 
         // Ambil semua data konsultasi dengan relasi
         $konsultasi = JadwalKonsultasi::with(['permintaan', 'hasilKonsultasi'])
             ->orderBy('tanggal', 'desc')
-            ->get();
+            ->paginate(5);
 
         // Statistik singkat (total kegiatan)
-        $totalPembinaan = $pembinaan->count();
-        $totalKonsultasi = $konsultasi->count();
+        $totalPembinaan = JadwalPembinaan::with(['jenis', 'topik', 'creator'])->count();
+        $totalKonsultasi = JadwalKonsultasi::with(['permintaan', 'hasilKonsultasi'])->count();
 
-        return view('dashboard.kepalauptd.laporan', compact(
+        return view('dashboard.kepalauptd.laporankonsultasi', compact(
             'user',
-            'pembinaan',
             'konsultasi',
             'totalPembinaan',
             'totalKonsultasi'
         ));
+    }
+
+    public function exportPembinaan()
+    {
+        return Excel::download(new PembinaanExport, 'laporan_pembinaan.xlsx');
+    }
+
+    public function exportKonsultasi()
+    {
+        return Excel::download(new KonsultasiExport, 'laporan_konsultasi.xlsx');
     }
 
 }

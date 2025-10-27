@@ -5,7 +5,6 @@
 <div class="p-6 bg-white rounded-lg shadow-md">
     <h1 class="text-2xl font-bold  mb-6 text-emerald-700">Profil UMKM</h1>
 
-    @foreach($umkmList as $umkm)
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {{-- Foto Profil --}}
         <div class="flex flex-col items-center border border-emerald-500 p-4 rounded-lg shadow">
@@ -14,7 +13,7 @@
             <h2 class="text-xl font-semibold text-gray-800">{{ $umkm->nama_usaha }}</h2>
             <p class="text-gray-500">{{ $umkm->bidang_usaha }}</p>
         </div>
-
+    
         {{-- Detail Profil --}}
         <div class="md:col-span-2 bg-white border border-emerald-500 p-6 rounded-lg shadow space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -36,10 +35,12 @@
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Tgl Terdaftar</p>
-                    <p class="font-medium text-gray-800">{{ $umkm->created_at ? \Carbon\Carbon::parse($umkm->created_at)->translatedFormat('d F Y') : '-' }}</p>
+                    <p class="font-medium text-gray-800">
+                        {{ $umkm->created_at ? \Carbon\Carbon::parse($umkm->created_at)->translatedFormat('d F Y') : '-' }}
+                    </p>
                 </div>
             </div>
-
+    
             {{-- Tombol Edit --}}
             <div class="pt-4">
                 <a href="{{ route('dashboard.umkm.edit', $umkm->id) }}"
@@ -49,6 +50,5 @@
             </div>
         </div>
     </div>
-    @endforeach
 </div>
 @endsection

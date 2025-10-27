@@ -44,7 +44,7 @@ class KonsultanKonsultasiController extends Controller
         $konsultasiDijadwalkan = PermintaanKonsultasi::where('konsultan_id', $konsultanId)
             ->whereHas('jadwal', fn($q) => $q->where('status', 'dijadwalkan'))
             ->with('jadwal')
-            ->get();
+            ->paginate(3);
 
         // Konsultasi selesai
         $konsultasiSelesai = PermintaanKonsultasi::where('konsultan_id', $konsultanId)
@@ -55,7 +55,7 @@ class KonsultanKonsultasiController extends Controller
                 'topik',
                 'konsultan.user'
             ])
-            ->get();
+            ->paginate(3);
 
         // Tambahkan dokumen_url ke setiap hasil konsultasi
         foreach ($konsultasiSelesai as $permintaan) {

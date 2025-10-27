@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Umkm;
 
-use App\Models\Umkm;
-use Illuminate\Http\Request;
-use App\Models\PesertaPembinaan;
 use App\Http\Controllers\Controller;
 use App\Models\PermintaanKonsultasi;
+use App\Models\PesertaPembinaan;
+use App\Models\Umkm;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardUmkmController extends Controller
@@ -27,8 +27,11 @@ class DashboardUmkmController extends Controller
 
         if ($umkmId) {
             $totalKonsultasi = PermintaanKonsultasi::where('umkm_id', $umkmId)->count();
+            // Konsultasi yang sudah selesai (status di tabel jadwal_konsultasi)
             $konsultasiSelesai = PermintaanKonsultasi::where('umkm_id', $umkmId)
-                ->where('status', 'selesai')
+                ->whereHas('jadwal', function ($query) {
+                    $query->where('status', 'selesai');
+                })
                 ->count();
 
             $totalPembinaan = PesertaPembinaan::where('umkm_id', $umkmId)->count();
@@ -47,10 +50,17 @@ class DashboardUmkmController extends Controller
     }
 
     public function profil()
-    { 
+    {
         $user = Auth::user();
-        $umkmList = Umkm::all();
-        return view('dashboard.umkm.profil', compact('user', 'umkmList'));
+
+        // Ambil UMKM milik user yang login
+        $umkm = $user->umkm;
+
+        if (! $umkm) {
+            return redirect()->back()->with('error', 'Profil UMKM belum tersedia untuk akun ini.');
+        }
+
+        return view('dashboard.umkm.profil', compact('user', 'umkm'));
     }
 
     public function edit($id)
@@ -66,12 +76,12 @@ class DashboardUmkmController extends Controller
         $umkm = Umkm::findOrFail($id);
 
         $request->validate([
-            'nama_usaha'     => 'required|string|max:255',
-            'bidang_usaha'   => 'required|string|max:255',
-            'alamat_usaha'   => 'required|string',
-            'tahun_berdiri'  => 'required|digits:4',
+            'nama_usaha' => 'required|string|max:255',
+            'bidang_usaha' => 'required|string|max:255',
+            'alamat_usaha' => 'required|string',
+            'tahun_berdiri' => 'required|digits:4',
             'kategori_usaha' => 'required|string|max:255',
-            'foto_profil'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $data = $request->only([
@@ -79,7 +89,7 @@ class DashboardUmkmController extends Controller
             'bidang_usaha',
             'alamat_usaha',
             'tahun_berdiri',
-            'kategori_usaha'
+            'kategori_usaha',
         ]);
 
         // Upload foto baru
@@ -97,7 +107,6 @@ class DashboardUmkmController extends Controller
         $umkm->update($data);
 
         return redirect()->route('dashboard.umkm.profil')
-                        ->with('success', 'Profil UMKM berhasil diupdate.');
+            ->with('success', 'Profil UMKM berhasil diupdate.');
     }
-
 }

@@ -101,14 +101,15 @@
                 {{ request()->routeIs('admin.jadwal-pembinaan.*') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
             <i class="ph ph-calendar-heart text-xl"></i> Jadwal Pembinaan
         </a>
-        <a href="#"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-sky-800 hover:bg-sky-100 transition">
+        <a href="{{ route('admin.riwayat-kegiatan.konsultasi') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('admin.riwayat-kegiatan.*') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
             <i class="ph ph-clock-counter-clockwise text-xl"></i> Riwayat Kegiatan
         </a>
-        <a href="#"
+        {{-- <a href="#"
             class="flex items-center gap-3 px-4 py-3 rounded-xl text-sky-800 hover:bg-sky-100 transition">
             <i class="ph ph-star-half text-xl"></i> Feedback & Rating
-        </a>
+        </a> --}}
         @endif
 
     </nav>
