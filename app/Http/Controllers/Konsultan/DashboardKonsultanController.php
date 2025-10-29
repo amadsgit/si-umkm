@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Konsultan;
 
-use Carbon\Carbon;
-use App\Models\Konsultan;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Konsultan;
 use App\Models\PermintaanKonsultasi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardKonsultanController extends Controller
@@ -28,30 +27,29 @@ class DashboardKonsultanController extends Controller
             $totalKonsultasi = PermintaanKonsultasi::where('konsultan_id', $konsultanId)->count();
 
             $konsultasiSelesai = PermintaanKonsultasi::where('konsultan_id', $konsultanId)
-            ->whereHas('jadwal', function ($q) {
-                $q->where('status', 'selesai');
-            })
-            ->with('jadwal')
-            ->count();
+                ->whereHas('jadwal', function ($q) {
+                    $q->where('status', 'selesai');
+                })
+                ->with('jadwal')
+                ->count();
 
             // Hitung sedang berlangsung
             $now = now();
             $konsultasiBerlangsung = PermintaanKonsultasi::where('konsultan_id', $konsultanId)
-            ->where('status', 'disetujui')
-            ->whereHas('jadwal', function ($q) use ($now) {
-                $q->whereDate('tanggal', $now->toDateString())
-                ->whereTime('waktu_mulai', '<=', $now->toTimeString())
-                ->whereTime('waktu_selesai', '>=', $now->toTimeString());
-            })
-            ->count();
+                ->where('status', 'disetujui')
+                ->whereHas('jadwal', function ($q) use ($now) {
+                    $q->whereDate('tanggal', $now->toDateString())
+                        ->whereTime('waktu_mulai', '<=', $now->toTimeString())
+                        ->whereTime('waktu_selesai', '>=', $now->toTimeString());
+                })
+                ->count();
 
-            
             $konsultasiMendatang = PermintaanKonsultasi::where('konsultan_id', $konsultanId)
-            ->whereHas('jadwal', function ($q) {
-                $q->where('status', 'dijadwalkan');
-            })
-            ->with('jadwal')
-            ->count();
+                ->whereHas('jadwal', function ($q) {
+                    $q->where('status', 'dijadwalkan');
+                })
+                ->with('jadwal')
+                ->count();
         }
 
         return view('dashboard.konsultan.index', compact(
@@ -64,10 +62,15 @@ class DashboardKonsultanController extends Controller
     }
 
     public function profil()
-    { 
+    {
         $user = Auth::user();
-        $konsultanList = Konsultan::all();
-        return view('dashboard.konsultan.profil', compact('user', 'konsultanList'));
+        $konsultan = $user->konsultan;
+
+        if (! $konsultan) {
+            return redirect()->back()->with('error', 'Profil Konsultan belum tersedia untuk akun ini.');
+        }
+
+        return view('dashboard.konsultan.profil', compact('user', 'konsultan'));
     }
 
     public function edit($id)

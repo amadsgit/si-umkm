@@ -5,10 +5,9 @@
 <div class="p-6 bg-white rounded-lg shadow-md">
     <h1 class="text-2xl font-bold mb-6 text-emerald-700">Profil Konsultan</h1>
 
-    @foreach($konsultanList as $konsultan)
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        {{-- Foto Profil --}}
+        {{-- Foto Profil --}} 
         <div class="flex flex-col items-center border border-emerald-500 p-4 rounded-lg shadow">
             <img src="{{ $konsultan->foto_profil ? asset('storage/' . $konsultan->foto_profil) : 'https://via.placeholder.com/150' }}"
                 alt="Foto Profil Konsultan" class="w-40 h-40 rounded-full object-cover shadow mb-4">
@@ -88,6 +87,5 @@
             </div>
         </div>
     </div>
-    @endforeach
 </div>
 @endsection

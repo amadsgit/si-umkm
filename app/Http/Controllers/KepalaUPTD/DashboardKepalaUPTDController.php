@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\KepalaUPTD;
 
+use App\Exports\KonsultasiExport;
+use App\Exports\PembinaanExport;
+use App\Http\Controllers\Controller;
+use App\Models\JadwalKonsultasi;
+use App\Models\JadwalPembinaan;
 use App\Models\KepalaUPTD;
 use Illuminate\Http\Request;
-use App\Models\JadwalPembinaan;
-use App\Exports\PembinaanExport;
-use App\Models\JadwalKonsultasi;
-use App\Exports\KonsultasiExport;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardKepalaUPTDController extends Controller
 {
@@ -22,24 +22,24 @@ class DashboardKepalaUPTDController extends Controller
 
         // Statistik Pembinaan per bulan
         $pembinaanStats = JadwalPembinaan::select(
-                DB::raw('MONTH(tanggal) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
+            DB::raw('MONTH(tanggal) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
             ->groupBy('bulan')
             ->pluck('total', 'bulan')
             ->toArray();
 
         // Statistik Konsultasi per bulan
         $konsultasiStats = JadwalKonsultasi::select(
-                DB::raw('MONTH(tanggal) as bulan'),
-                DB::raw('COUNT(*) as total')
-            )
+            DB::raw('MONTH(tanggal) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
             ->groupBy('bulan')
             ->pluck('total', 'bulan')
             ->toArray();
 
         // Label bulan (1–12)
-        $labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         // Data sesuai index bulan
         $pembinaanData = [];
@@ -58,9 +58,11 @@ class DashboardKepalaUPTDController extends Controller
     }
 
     public function profil()
-    { 
+    {
         $user = Auth::user();
-        $kepalauptd = KepalaUPTD::all();
+
+        $kepalauptd = $user->kepalaUPTD;
+
         return view('dashboard.kepalauptd.profil', compact('user', 'kepalauptd'));
     }
 
@@ -80,19 +82,19 @@ class DashboardKepalaUPTDController extends Controller
 
         $request->validate([
             'username' => 'required|string|max:100',
-            'email'    => 'required|email',
-            'phone'    => 'nullable|string|max:20',
-            'nip'      => 'required|string|max:50',
-            'jabatan'  => 'required|string|max:100',
+            'email' => 'required|email',
+            'phone' => 'nullable|string|max:20',
+            'nip' => 'required|string|max:50',
+            'jabatan' => 'required|string|max:100',
             'status_aktif' => 'required|boolean',
-            'foto_profil'  => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         // Update data user terkait
         $kepalauptd->user->update([
             'username' => $request->username,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
+            'email' => $request->email,
+            'phone' => $request->phone,
         ]);
 
         // Update data Kepala UPTD
@@ -100,8 +102,8 @@ class DashboardKepalaUPTDController extends Controller
 
         // Upload foto baru jika ada
         if ($request->hasFile('foto_profil')) {
-            if ($kepalauptd->foto_profil && Storage::exists('public/' . $kepalauptd->foto_profil)) {
-                Storage::delete('public/' . $kepalauptd->foto_profil);
+            if ($kepalauptd->foto_profil && Storage::exists('public/'.$kepalauptd->foto_profil)) {
+                Storage::delete('public/'.$kepalauptd->foto_profil);
             }
             $data['foto_profil'] = $request->file('foto_profil')->store('kepalauptd', 'public');
         }
@@ -109,11 +111,10 @@ class DashboardKepalaUPTDController extends Controller
         $kepalauptd->update($data);
 
         return redirect()->route('dashboard.kepalauptd.profil')
-                         ->with('success', 'Profil Kepala UPTD berhasil diperbarui.');
+            ->with('success', 'Profil Kepala UPTD berhasil diperbarui.');
     }
 
-
-    public function laporanpembinaan() 
+    public function laporanpembinaan()
     {
         $user = Auth::user();
 
@@ -135,7 +136,7 @@ class DashboardKepalaUPTDController extends Controller
         ));
     }
 
-    public function laporankonsultasi() 
+    public function laporankonsultasi()
     {
         $user = Auth::user();
 
@@ -165,5 +166,4 @@ class DashboardKepalaUPTDController extends Controller
     {
         return Excel::download(new KonsultasiExport, 'laporan_konsultasi.xlsx');
     }
-
 }
