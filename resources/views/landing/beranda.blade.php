@@ -106,6 +106,23 @@
     <section id="pembinaan" class="py-20 text-gray-700 bg-gray-50">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold mb-10" data-aos="fade-up">Jadwal Pembinaan Terdekat</h2>
+
+            @if ($jadwalPembinaanList->isEmpty())
+            <div class="bg-white rounded-2xl shadow-md p-10 text-center text-gray-600 max-w-2xl mx-auto" data-aos="fade-up">
+                {{-- <i class="ph ph-calendar-x text-5xl text-gray-400 mb-4"></i> --}}
+                <div class="flex items-center justify-center mb-4">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 text-orange-600">
+                        <i class="ph ph-info text-2xl"></i>
+                    </div>
+                </div>
+                <p class="text-lg font-medium">
+                    Saat ini belum terdapat jadwal pembinaan UMKM yang tersedia.
+                </p>
+                <p class="text-sm text-gray-500 mt-1">
+                    Silakan periksa kembali pada waktu mendatang untuk mendapatkan informasi pembinaan terbaru.
+                </p>
+            </div>
+            @else
             <div class="grid md:grid-cols-3 gap-8">
                 @foreach ($jadwalPembinaanList->take(3) as $pembinaan)
                 <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
@@ -160,6 +177,7 @@
                 </div>
                 @endforeach
             </div>
+            @endif
         </div>
     </section>
 
