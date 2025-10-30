@@ -122,9 +122,9 @@
                 <tr>
                     <th class="px-4 py-2 border">No</th>
                     <th class="px-4 py-2 border">Topik</th>
-                    <th class="px-4 py-2 border">Konsultan</th>
                     <th class="px-4 py-2 border">Tanggal</th>
                     <th class="px-4 py-2 border">Status</th>
+                    <th class="px-4 py-2 border">Alasan</th>
                 </tr>
             </thead>
             <tbody class="text-sm">
@@ -132,11 +132,11 @@
                 <tr class="hover:bg-gray-50 align-top">
                     <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
                     <td class="px-4 py-2 border">{{ $item->topik->nama_topik }}</td>
-                    <td class="px-4 py-2 border">{{ $item->konsultan->user->username ?? '-' }}</td>
                     <td class="px-4 py-2 border">{{ $item->created_at->format('d F Y') }}</td>
                     <td class="px-4 py-2 border">
                         <span class="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-medium">Ditolak</span>
                     </td>
+                    <td class="px-4 py-2 border">{{ $item->alasan_ditolak }}</td>
                 </tr>
                 @empty
                 <tr>

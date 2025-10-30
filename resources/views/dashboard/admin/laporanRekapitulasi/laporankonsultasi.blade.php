@@ -38,9 +38,9 @@
     <div class="mb-6 border-b border-gray-200">
         <nav class="flex space-x-8">
             <!-- Tab Pembinaan -->
-            <a href="{{ route('dashboard.kepalauptd.laporan') }}"
+            <a href="{{ route('dashboard.admin.laporan') }}"
                 class="relative pb-3 font-semibold text-sm tracking-wide transition duration-300
-                    {{ request()->routeIs('dashboard.kepalauptd.laporan') 
+                    {{ request()->routeIs('dashboard.admin.laporan') 
                         ? 'text-blue-600 after:w-full' 
                         : 'text-gray-500 hover:text-blue-600 after:w-0 hover:after:w-full' }}
                     after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-blue-600 after:rounded-full after:transition-all after:duration-300">
@@ -48,9 +48,9 @@
             </a>
     
             <!-- Tab Konsultasi -->
-            <a href="{{ route('dashboard.kepalauptd.laporankonsultasi') }}"
+            <a href="{{ route('dashboard.admin.laporankonsultasi') }}"
                 class="relative pb-3 font-semibold text-sm tracking-wide transition duration-300
-                    {{ request()->routeIs('dashboard.kepalauptd.laporankonsultasi') 
+                    {{ request()->routeIs('dashboard.admin.laporankonsultasi') 
                         ? 'text-blue-600 after:w-full' 
                         : 'text-gray-500 hover:text-blue-600 after:w-0 hover:after:w-full' }}
                     after:absolute after:bottom-0 after:left-0 after:h-[3px] after:bg-blue-600 after:rounded-full after:transition-all after:duration-300">
@@ -63,7 +63,7 @@
     <div class="bg-white rounded-2xl shadow-md p-6">
         <h3 class="text-xl font-semibold text-gray-700 mb-4">📌 Daftar Kegiatan Konsultasi</h3>
         <div class="flex gap-4 mb-4">
-            <a href="{{ route('laporan.export.konsultasi') }}"
+            <a href="{{ route('laporan.admin.exportkonsultasi') }}"
                 class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
                 📥 Export Konsultasi
             </a>

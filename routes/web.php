@@ -1,27 +1,27 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LandingController;
-use App\Http\Controllers\Admin\UMKMController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\KonsultanController;
-use App\Http\Controllers\Admin\KepalaUPTDController;
-use App\Http\Controllers\Admin\MasterDataController;
-use App\Http\Controllers\Auth\RegisterUmkmController;
-use App\Http\Controllers\Umkm\DashboardUmkmController;
-use App\Http\Controllers\Umkm\UmkmPembinaanController;
-use App\Http\Controllers\Umkm\UmkmKonsultasiController;
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Admin\JenisPembinaanController;
-use App\Http\Controllers\Admin\TopikPembinaanController;
+use App\Http\Controllers\Admin\JadwalKonsultasiController;
 use App\Http\Controllers\Admin\JadwalPembinaanController;
+use App\Http\Controllers\Admin\JenisPembinaanController;
+use App\Http\Controllers\Admin\KepalaUPTDController;
+use App\Http\Controllers\Admin\KonsultanController;
+use App\Http\Controllers\Admin\MasterDataController;
 use App\Http\Controllers\Admin\RiwayatKegiatanController;
 use App\Http\Controllers\Admin\TopikKonsultasiController;
-use App\Http\Controllers\Admin\JadwalKonsultasiController;
-use App\Http\Middleware\RedirectIfAuthenticatedToDashboard;
+use App\Http\Controllers\Admin\TopikPembinaanController;
+use App\Http\Controllers\Admin\UMKMController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterUmkmController;
+use App\Http\Controllers\KepalaUPTD\DashboardKepalaUPTDController;
 use App\Http\Controllers\Konsultan\DashboardKonsultanController;
 use App\Http\Controllers\Konsultan\KonsultanKonsultasiController;
-use App\Http\Controllers\KepalaUPTD\DashboardKepalaUPTDController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\Umkm\DashboardUmkmController;
+use App\Http\Controllers\Umkm\UmkmKonsultasiController;
+use App\Http\Controllers\Umkm\UmkmPembinaanController;
+use App\Http\Middleware\RedirectIfAuthenticatedToDashboard;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware([RedirectIfAuthenticatedToDashboard::class])->group(function () {
     // Route::get('/', function () { return view('landing.beranda'); });
@@ -105,8 +105,16 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         Route::get('/dashboard/admin/riwayat-kegiatan-konsultasi', [RiwayatKegiatanController::class, 'IndexRiwayatKonsultasi'])->name('admin.riwayat-kegiatan.konsultasi');
         Route::get('/dashboard/admin/riwayat-kegiatan-pembinaan', [RiwayatKegiatanController::class, 'IndexRiwayatPembinaan'])->name('admin.riwayat-kegiatan.pembinaan');
 
-    });
+        // laporan
+        Route::get('/dashboard/admin/laporan-pembinaan', [DashboardAdminController::class, 'laporanpembinaan'])->name('dashboard.admin.laporan');
+        Route::get('/dashboard/admin/laporan-konsultasi', [DashboardAdminController::class, 'laporankonsultasi'])->name('dashboard.admin.laporankonsultasi');
 
+        Route::get('/admin/laporan/export/pembinaan', [DashboardAdminController::class, 'exportPembinaan'])
+            ->name('laporan.admin.exportpembinaan');
+        Route::get('/admin/laporan/export/konsultasi', [DashboardAdminController::class, 'exportKonsultasi'])
+            ->name('laporan.admin.exportkonsultasi');
+
+    });
 
     // ROLE UMKM
     Route::middleware(['auth', 'role:umkm'])->group(function () {
@@ -128,7 +136,7 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
             Route::post('/{id}/feedback', [UmkmKonsultasiController::class, 'feedbackStore'])
                 ->name('feedback.store');
         });
-        
+
         Route::get('/dashboard/umkm/pembinaan', [UmkmPembinaanController::class, 'index'])->name('dashboard.umkm.pembinaan.index');
         Route::post('/dashboard/umkm/pembinaan/apply/{id}', [UmkmPembinaanController::class, 'apply'])->name('dashboard.umkm.pembinaan.apply');
         Route::get('/dashboard/umkm/pembinaan/list-kegiatan-pembinaan', [UmkmPembinaanController::class, 'listPembinaan'])->name('dashboard.umkm.pembinaan.listpembinaan');
@@ -140,7 +148,6 @@ Route::middleware(['auth', 'prevent-back-history'])->group(function () {
         });
 
     });
-
 
     // ROLE KONSULTAN
     Route::middleware(['auth', 'role:konsultan'])->group(function () {

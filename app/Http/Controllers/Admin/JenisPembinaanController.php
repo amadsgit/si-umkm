@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\JenisPembinaan;
 use App\Http\Controllers\Controller;
+use App\Models\JenisPembinaan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class JenisPembinaanController extends Controller
@@ -12,7 +12,7 @@ class JenisPembinaanController extends Controller
     public function Index()
     {
         $user = Auth::user();
-        $jenisPembinaanList = JenisPembinaan::with('creator')->get();
+        $jenisPembinaanList = JenisPembinaan::with('creator')->paginate(5);
 
         return view('dashboard.admin.jenispembinaan.index', compact('user', 'jenisPembinaanList'));
     }
@@ -41,6 +41,7 @@ class JenisPembinaanController extends Controller
     public function edit($id)
     {
         $jenis = JenisPembinaan::findOrFail($id);
+
         return view('dashboard.admin.jenispembinaan.edit', compact('jenis'));
     }
 
@@ -70,4 +71,3 @@ class JenisPembinaanController extends Controller
         return redirect()->route('admin.jenis-pembinaan.index')->with('success', 'Jenis Pembinaan berhasil dihapus.');
     }
 }
-

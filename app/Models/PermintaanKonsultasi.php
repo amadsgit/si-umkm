@@ -18,6 +18,7 @@ class PermintaanKonsultasi extends Model
         'preferensi_tanggal',
         'deskripsi_masalah',
         'status',
+        'alasan_ditolak',
     ];
 
     // Relasi ke UMKM

@@ -78,6 +78,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-4 mb-4">
+            {{ $topikPembinaanList->links('vendor.pagination.tailwind') }}
+        </div>
     </div>
 </div>
 @endsection

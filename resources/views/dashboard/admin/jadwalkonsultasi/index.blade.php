@@ -24,12 +24,13 @@
         </div>
     </section>
 
+
     {{-- === 2. Permintaan Disetujui (Belum Selesai) === --}}
     <section>
-        <h2 class="text-xl font-bold text-gray-600 mb-4">Konsultasi Disetujui</h2>
+        <h2 class="text-xl font-bold text-blue-600 mb-4">Konsultasi Disetujui</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full border text-sm">
-                <thead class="bg-gray-100">
+                <thead class="bg-blue-500 text-white">
                     <tr>
                         <th class="px-3 py-2 border">No</th>
                         <th class="px-3 py-2 border">UMKM</th>
@@ -63,8 +64,12 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="mt-4 mb-4">
+                {{ $disetujui->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </section>
+
 
     {{-- === 3. Permintaan dijadwalkan=== --}}
     <section>
@@ -149,9 +154,54 @@
                     </tr>
                     @endforelse
                 </tbody>
+                <div class="mt-4 mb-4">
+                    {{ $dijadwalkan->links('vendor.pagination.tailwind') }}
+                </div>
             </table>
         </div>
     </section>
+
+    <section>
+        {{-- Permintaan Ditolak --}}
+        <h2 class="text-lg font-semibold text-rose-500 mt-8 mb-4">Permintaan Konsultasi Ditolak</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-200 rounded-lg mt-2">
+                <thead class="bg-rose-500 text-white text-sm text-sm">
+                    <tr>
+                        <th class="px-4 py-2 border">No</th>
+                        <th class="px-4 py-2 border">Topik</th>
+                        <th class="px-4 py-2 border">Tanggal</th>
+                        <th class="px-4 py-2 border">Status</th>
+                        <th class="px-4 py-2 border">Alasan</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    @forelse($ditolakList as $item)
+                    <tr class="hover:bg-gray-50 align-top">
+                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 border">{{ $item->topik->nama_topik }}</td>
+                        <td class="px-4 py-2 border">{{ $item->created_at->format('d F Y') }}</td>
+                        <td class="px-4 py-2 border">
+                            <span class="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-medium">Ditolak</span>
+                        </td>
+                        <td class="px-4 py-2 border">{{ $item->alasan_ditolak }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-gray-500 py-4">Belum ada permintaan yang ditolak.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <div class="mt-4 mb-4">
+                {{ $ditolakList->links('vendor.pagination.tailwind') }}
+            </div>
+        </div>
+    </section>
+
+
+
+
 
     {{-- === Modal Pending (Alpine-controlled via jadwalPage()) === --}}
     <div x-show="showPending" x-transition.opacity.200
@@ -159,25 +209,32 @@
         <div @click.away="closePending()" class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
             <h3 class="text-lg font-bold mb-4">Persetujuan Permintaan Konsultasi</h3>
 
-            {{-- dynamic action menggunakan selectedId --}} 
-            <form :action="`/dashboard/admin/update-permintaan/${selectedId}/status`" method="POST">
+            {{-- Dynamic form --}}
+            <form x-data="{ status: '' }" :action="`/dashboard/admin/update-permintaan/${selectedId}/status`" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="permintaan_id" :value="selectedId">
-
+            
                 <p class="mb-4 text-gray-600">Pilih status persetujuan untuk permintaan konsultasi ini:</p>
-
-                <select name="status" class="w-full border rounded p-2 mb-4" required>
+            
+                {{-- Select status --}}
+                <select name="status" x-model="status" class="w-full border rounded p-2 mb-4" required>
                     <option value="">-- Pilih Status --</option>
                     <option value="disetujui">Disetujui</option>
                     <option value="ditolak">Ditolak</option>
                 </select>
-
+            
+                {{-- Input alasan muncul hanya jika ditolak --}}
+                <div x-show="status === 'ditolak'" x-transition.opacity.200>
+                    <label class="block mb-2 text-gray-700 font-medium">Alasan Penolakan</label>
+                    <textarea name="alasan" rows="3" class="w-full border rounded p-2 mb-4"
+                        placeholder="Tuliskan alasan penolakan di sini..." required></textarea>
+                </div>
+            
                 <div class="flex justify-end gap-2">
                     <button type="button" @click="closePending()"
                         class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700">Simpan</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700">Simpan</button>
                 </div>
             </form>
         </div>

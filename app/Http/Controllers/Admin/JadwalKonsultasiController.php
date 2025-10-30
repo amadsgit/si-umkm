@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Konsultan;
-use Illuminate\Http\Request;
-use App\Models\JadwalKonsultasi;
 use App\Http\Controllers\Controller;
-use App\Models\PermintaanKonsultasi;
-use Illuminate\Support\Facades\Auth;
 use App\Mail\JadwalKonsultasiMail;
+use App\Models\JadwalKonsultasi;
+use App\Models\Konsultan;
+use App\Models\PermintaanKonsultasi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class JadwalKonsultasiController extends Controller
@@ -21,12 +21,12 @@ class JadwalKonsultasiController extends Controller
         // Cek semua jadwal yang sudah lewat dan ubah status jadi 'selesai'
         $now = now();
         $jadwalKadaluarsa = JadwalKonsultasi::where('status', 'dijadwalkan')
-            ->where(function($q) use ($now) {
+            ->where(function ($q) use ($now) {
                 $q->where('tanggal', '<', $now->toDateString())
-                ->orWhere(function($sub) use ($now) {
-                    $sub->where('tanggal', '=', $now->toDateString())
-                        ->where('waktu_selesai', '<', $now->format('H:i'));
-                });
+                    ->orWhere(function ($sub) use ($now) {
+                        $sub->where('tanggal', '=', $now->toDateString())
+                            ->where('waktu_selesai', '<', $now->format('H:i'));
+                    });
             })
             ->get();
 
@@ -41,35 +41,50 @@ class JadwalKonsultasiController extends Controller
         $disetujui = PermintaanKonsultasi::where('status', 'disetujui')
             ->whereDoesntHave('jadwal')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(5);
 
         $dijadwalkan = PermintaanKonsultasi::where('status', 'disetujui')
             ->whereHas('jadwal', function ($q) {
                 $q->whereIn('status', ['dijadwalkan', 'dibatalkan']);
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(5);
 
         $selesai = PermintaanKonsultasi::where('status', 'disetujui')
             ->whereHas('jadwal', function ($q) {
                 $q->where('status', 'selesai');
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(5);
+
+        // Permintaan yang ditolak
+        $ditolakList = PermintaanKonsultasi::where('status', 'ditolak')
+            ->latest()
+            ->paginate(5);
 
         return view('dashboard.admin.jadwalkonsultasi.index', compact(
-            'konsultanList', 'user', 'pending', 'disetujui', 'dijadwalkan', 'selesai'
+            'konsultanList', 'user', 'pending', 'disetujui', 'dijadwalkan', 'selesai', 'ditolakList'
         ));
-    } 
+    }
 
     public function UpdateStatusPermintaan(Request $request, $id)
     {
         $validated = $request->validate([
             'status' => 'required|in:disetujui,ditolak',
+            'alasan' => 'nullable|string|max:500',
         ]);
 
         $permintaan = PermintaanKonsultasi::findOrFail($id);
         $permintaan->status = $validated['status'];
+
+        // Jika status = "ditolak", isi alasan_ditolak
+        if ($validated['status'] === 'ditolak') {
+            $permintaan->alasan_ditolak = $validated['alasan'] ?? '-';
+        } else {
+            // Kosongkan alasan_ditolak jika status bukan ditolak
+            $permintaan->alasan_ditolak = null;
+        }
+
         $permintaan->save();
 
         return redirect()
@@ -129,7 +144,7 @@ class JadwalKonsultasiController extends Controller
 
         return response()->json([
             'jadwal' => $jadwal,
-            'konsultanList' => $konsultanList
+            'konsultanList' => $konsultanList,
         ]);
     }
 

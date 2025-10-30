@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\TopikKonsultasi;
 use App\Http\Controllers\Controller;
+use App\Models\TopikKonsultasi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TopikKonsultasiController extends Controller
@@ -12,7 +12,7 @@ class TopikKonsultasiController extends Controller
     public function Index()
     {
         $user = Auth::user();
-        $topikKonsultasiList = TopikKonsultasi::all();
+        $topikKonsultasiList = TopikKonsultasi::paginate(5);
 
         return view('dashboard.admin.topikkonsultasi.index', compact('user', 'topikKonsultasiList'));
     }
@@ -40,6 +40,7 @@ class TopikKonsultasiController extends Controller
     public function edit($id)
     {
         $topik = TopikKonsultasi::findOrFail($id);
+
         return view('dashboard.admin.topikkonsultasi.edit', compact('topik'));
     }
 
@@ -68,4 +69,3 @@ class TopikKonsultasiController extends Controller
         return redirect()->route('admin.topik-konsultasi.index')->with('success', 'Topik berhasil dihapus.');
     }
 }
-

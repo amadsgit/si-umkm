@@ -2,62 +2,61 @@
 
 namespace App\Http\Controllers\Umkm;
 
-use App\Models\Feedback;
-use Illuminate\Http\Request;
-use App\Models\TopikKonsultasi;
 use App\Http\Controllers\Controller;
+use App\Models\Feedback;
 use App\Models\PermintaanKonsultasi;
+use App\Models\TopikKonsultasi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UmkmKonsultasiController extends Controller
 {
     public function index()
-    { 
+    {
         $user = Auth::user();
         $now = now();
 
         // Permintaan konsultasi yang masih berjalan / menunggu
         $permintaanList = PermintaanKonsultasi::where('umkm_id', $user->umkm->id)
-        ->with(['topik', 'konsultan.user', 'jadwal', 'hasilKonsultasi'])
-        ->where(function($query) use ($now) {
-            $query->where('status', 'pending') // tampilkan semua yang pending
-                ->orWhereHas('jadwal', function($q) use ($now) {
-                    $q->where(function($query) use ($now) {
-                        $query->where('status', '!=', 'selesai')
-                                ->where(function($sub) use ($now) {
+            ->with(['topik', 'konsultan.user', 'jadwal', 'hasilKonsultasi'])
+            ->where(function ($query) use ($now) {
+                $query->where('status', 'pending') // tampilkan semua yang pending
+                    ->orWhereHas('jadwal', function ($q) use ($now) {
+                        $q->where(function ($query) use ($now) {
+                            $query->where('status', '!=', 'selesai')
+                                ->where(function ($sub) use ($now) {
                                     // Hanya tampilkan yang belum lewat waktu jadwal
                                     $sub->where('tanggal', '>', $now->toDateString())
-                                        ->orWhere(function($t) use ($now) {
+                                        ->orWhere(function ($t) use ($now) {
                                             $t->where('tanggal', $now->toDateString())
-                                            ->where('waktu_selesai', '>', $now->format('H:i:s'));
+                                                ->where('waktu_selesai', '>', $now->format('H:i:s'));
                                         });
                                 });
+                        });
                     });
-                });
-        })
-        ->latest()
-        ->get();
-
+            })
+            ->latest()
+            ->get();
 
         $riwayatList = PermintaanKonsultasi::where('umkm_id', $user->umkm->id)
-        ->whereHas('jadwal', function($q) {
-            $q->where('status', 'selesai');
-        })
-        ->with([
-            'topik',
-            'konsultan.user',
-            'jadwal',
-            'hasilKonsultasi'
-        ])
-        ->latest()
-        ->paginate(3);
+            ->whereHas('jadwal', function ($q) {
+                $q->where('status', 'selesai');
+            })
+            ->with([
+                'topik',
+                'konsultan.user',
+                'jadwal',
+                'hasilKonsultasi',
+            ])
+            ->latest()
+            ->paginate(3);
 
         // Permintaan yang ditolak
         $ditolakList = PermintaanKonsultasi::where('umkm_id', $user->umkm->id)
             ->where('status', 'ditolak')
             ->with(['topik', 'konsultan.user', 'jadwal', 'hasilKonsultasi'])
             ->latest()
-            ->get();
+            ->paginate(5);
 
         return view('dashboard.umkm.konsultasi.index', compact('user', 'permintaanList', 'riwayatList', 'ditolakList'));
     }
@@ -88,10 +87,9 @@ class UmkmKonsultasiController extends Controller
         ]);
 
         return redirect()->route('dashboard.umkm.konsultasi.index')
-                         ->with('success', 'Permintaan konsultasi berhasil diajukan.');
+            ->with('success', 'Permintaan konsultasi berhasil diajukan.');
     }
 
-    
     public function destroy($id)
     {
         $user = Auth::user();
@@ -107,7 +105,6 @@ class UmkmKonsultasiController extends Controller
         return redirect()->route('dashboard.umkm.konsultasi.index')
             ->with('success', 'Permintaan konsultasi berhasil dibatalkan.');
     }
-
 
     public function feedbackForm($id)
     {
@@ -149,7 +146,6 @@ class UmkmKonsultasiController extends Controller
         );
 
         return redirect()->route('dashboard.umkm.konsultasi.index')
-                        ->with('success', 'Feedback berhasil dikirim.');
+            ->with('success', 'Feedback berhasil dikirim.');
     }
-
 }

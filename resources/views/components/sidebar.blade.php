@@ -106,9 +106,14 @@
                 {{ request()->routeIs('admin.riwayat-kegiatan.*') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
             <i class="ph ph-clock-counter-clockwise text-xl"></i> Riwayat Kegiatan
         </a>
+        <a href="{{ route('dashboard.admin.laporan') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('dashboard.admin.laporan') ? 'bg-sky-100 text-sky-900 font-semibold' : 'text-sky-800 hover:bg-sky-100' }}">
+            <i class="ph ph-chat-dots text-xl"></i> Laporan & Rekapitulasi
+        </a>
         {{-- <a href="#"
             class="flex items-center gap-3 px-4 py-3 rounded-xl text-sky-800 hover:bg-sky-100 transition">
-            <i class="ph ph-star-half text-xl"></i> Feedback & Rating
+            <i class="ph ph-star-half text-xl"></i> Fee
         </a> --}}
         @endif
 

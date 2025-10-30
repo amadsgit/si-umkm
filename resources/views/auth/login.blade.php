@@ -43,14 +43,14 @@
                 </div>
 
                 <!-- Remember & Forgot -->
-                <div class="flex items-center justify-between">
+                {{-- <div class="flex items-center justify-between">
                     <label class="flex items-center text-sm text-gray-600">
                         <input type="checkbox" name="remember" class="form-checkbox h-4 w-4 text-emerald-600 mr-2" />
                         Ingat saya
                     </label>
                     <a href="#" class="text-sm text-emerald-600 hover:underline">Lupa
                         password?</a>
-                </div>
+                </div> --}}
 
                 <!-- Button -->
                 <button type="submit"
