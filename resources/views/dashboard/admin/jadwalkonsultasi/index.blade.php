@@ -26,174 +26,210 @@
 
 
     {{-- === 2. Permintaan Disetujui (Belum Selesai) === --}}
-    <section>
-        <h2 class="text-xl font-bold text-blue-600 mb-4">Konsultasi Disetujui</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full border text-sm">
-                <thead class="bg-blue-500 text-white">
+    <section class="mb-10">
+        <div class="flex items-center gap-2 mb-5">
+            <div class="bg-blue-100 p-2 rounded-full">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M13 16h-1v-4h-1m2 4v1a2 2 0 11-4 0v-1m6-2a9 9 0 11-6.708-8.708A9 9 0 0118 14z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-blue-700 tracking-wide">Konsultasi Disetujui</h2>
+        </div>
+    
+        <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-gray-100">
+            <table class="min-w-full text-sm text-gray-700">
+                <thead class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs uppercase tracking-wide">
                     <tr>
-                        <th class="px-3 py-2 border">No</th>
-                        <th class="px-3 py-2 border">UMKM</th>
-                        <th class="px-3 py-2 border">Topik</th>
-                        <th class="px-3 py-2 border">Status</th>
-                        <th class="px-3 py-2 border">Tgl Preferensi</th>
-                        <th class="px-3 py-2 border">Tgl Pengajuan</th>
-                        <th class="px-3 py-2 border">Aksi</th>
+                        <th class="px-4 py-3 text-left">No</th>
+                        <th class="px-4 py-3 text-left">UMKM</th>
+                        <th class="px-4 py-3 text-left">Topik</th>
+                        <th class="px-4 py-3 text-left">Status</th>
+                        <th class="px-4 py-3 text-left">Tgl Preferensi</th>
+                        <th class="px-4 py-3 text-left">Tgl Pengajuan</th>
+                        <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100">
                     @forelse($disetujui as $item)
-                    <tr>
-                        <td class="border px-3 py-2">{{ $loop->iteration }}</td>
-                        <td class="border px-3 py-2">{{ $item->umkm->nama_usaha }}</td>
-                        <td class="border px-3 py-2">{{ $item->topik->nama_topik }}</td>
-                        <td class="border px-3 py-2">{{ $item->status }}</td>
-                        <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($item->tanggal_preferensi)->format('d M Y') }}</td>
-                        <td class="border px-3 py-2">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</td>
-                        <td class="border px-3 py-2">
+                    <tr class="hover:bg-blue-50 transition">
+                        <td class="px-4 py-2 font-medium text-gray-600">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $item->umkm->nama_usaha }}</td>
+                        <td class="px-4 py-2">{{ $item->topik->nama_topik }}</td>
+                        <td class="px-4 py-2">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+                                {{ $item->status }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->tanggal_preferensi)->format('d M Y') }}</td>
+                        <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</td>
+                        <td class="px-4 py-2 text-center">
                             <button @click.prevent="openJadwal({{ $item->id }})"
-                                class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs">
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-full text-xs transition">
                                 Penjadwalan
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center text-gray-500 py-3">Tidak ada permintaan disetujui.</td>
+                        <td colspan="7" class="text-center text-gray-500 py-4 italic">
+                            Tidak ada permintaan disetujui.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-            <div class="mt-4 mb-4">
+            <div class="p-4">
                 {{ $disetujui->links('vendor.pagination.tailwind') }}
             </div>
         </div>
     </section>
-
-
-    {{-- === 3. Permintaan dijadwalkan=== --}}
+    
+    
+    {{-- === 3. Permintaan Dijadwalkan === --}}
     <section>
-        <h2 class="text-xl font-bold text-emerald-500 mb-4">Konsultasi Dijadwalkan</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full border text-sm">
-                <thead class="bg-emerald-500 text-white">
+        <div class="flex items-center gap-2 mb-5">
+            <div class="bg-emerald-100 p-2 rounded-full">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12l2 2l4 -4m1-5a9 9 0 11-6.708 8.708A9 9 0 0118 14z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-emerald-600 tracking-wide">Konsultasi Dijadwalkan</h2>
+        </div>
+    
+        <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-gray-100">
+            <table class="min-w-full text-sm text-gray-700">
+                <thead class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs uppercase tracking-wide">
                     <tr>
-                        <th class="px-3 py-2 border">No</th>
-                        <th class="px-3 py-2 border">UMKM</th>
-                        <th class="px-3 py-2 border">Topik</th>
-                        <th class="px-3 py-2 border">Konsultan</th>
-                        <th class="px-3 py-2 border">Jadwal Kegiatan</th>
-                        <th class="px-3 py-2 border">Link/Lokasi</th>
-                        <th class="px-3 py-2 border">Aksi</th>
+                        <th class="px-4 py-3 text-left">No</th>
+                        <th class="px-4 py-3 text-left">UMKM</th>
+                        <th class="px-4 py-3 text-left">Topik</th>
+                        <th class="px-4 py-3 text-left">Konsultan</th>
+                        <th class="px-4 py-3 text-left">Jadwal Kegiatan</th>
+                        <th class="px-4 py-3 text-left">Link / Lokasi</th>
+                        <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100">
                     @forelse($dijadwalkan as $item)
-                    <tr>
-                        <td class="border px-3 py-2">{{ $loop->iteration }}</td>
-                        <td class="border px-3 py-2">{{ $item->umkm->nama_usaha }}</td>
-                        <td class="border px-3 py-2">{{ $item->topik->nama_topik }}</td>
-                        <td class="border px-3 py-2">{{ $item->konsultan->user->username ?? '-' }}</td>
-                        <td class="border font-bold px-3 py-2">
+                    <tr class="hover:bg-emerald-50 transition">
+                        <td class="px-4 py-2 font-medium text-gray-600">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $item->umkm->nama_usaha }}</td>
+                        <td class="px-4 py-2">{{ $item->topik->nama_topik }}</td>
+                        <td class="px-4 py-2">{{ $item->konsultan->user->username ?? '-' }}</td>
+                        <td class="px-4 py-2 font-semibold text-gray-800">
                             @if($item->jadwal)
-                            {{-- Format tanggal --}}
                             {{ \Carbon\Carbon::parse($item->jadwal->tanggal)->format('d M Y') }}
-                        
-                            {{-- Format jam tanpa detik --}}
                             {{ \Carbon\Carbon::parse($item->jadwal->waktu_mulai)->format('H.i') }} -
                             {{ \Carbon\Carbon::parse($item->jadwal->waktu_selesai)->format('H.i') }}
-                        
-                            {{-- Countdown --}}
+    
                             @php
                             $waktuMulai = \Carbon\Carbon::parse($item->jadwal->tanggal . ' ' . $item->jadwal->waktu_mulai);
                             $now = now();
                             @endphp
-                        
+    
                             @if($now->lessThan($waktuMulai))
-                            <span class="text-sm text-emerald-600">
-                                ({{ $now->diffForHumans($waktuMulai, [
-                                'parts' => 2,
-                                'join' => true
-                                ]) }})
+                            <span class="text-sm text-emerald-600 block">
+                                ({{ $now->diffForHumans($waktuMulai, ['parts' => 2, 'join' => true]) }})
                             </span>
                             @else
-                            <span class="text-sm text-red-500">(Sedang berlangsung / Selesai)</span>
+                            <span class="text-sm text-red-500 block">(Sedang berlangsung / Selesai)</span>
                             @endif
                             @else
-                            <span class="text-gray-500">Belum dijadwalkan</span>
+                            <span class="text-gray-400 italic">Belum dijadwalkan</span>
                             @endif
                         </td>
-                        <td class="border px-3 py-2">
+                        <td class="px-4 py-2">
                             @if($item->jadwal)
                             {{ ucfirst($item->jadwal->metode) }}<br>
-                        
                             @if(Str::startsWith($item->jadwal->lokasi_link, ['http://', 'https://']))
-                            {{-- Link Online --}}
-                            <a href="{{ $item->jadwal->lokasi_link }}" target="_blank" class="text-blue-600 underline">
+                            <a href="{{ $item->jadwal->lokasi_link }}" target="_blank"
+                                class="text-blue-600 hover:underline text-sm">
                                 {{ $item->jadwal->lokasi_link }}
                             </a>
                             @else
-                            {{-- Alamat Offline --}}
-                            <span class="text-gray-800">{{ $item->jadwal->lokasi_link }}</span>
+                            <span class="text-gray-800 text-sm">{{ $item->jadwal->lokasi_link }}</span>
                             @endif
-                        
                             @else
-                            <span class="text-gray-500">Belum ada lokasi/link</span>
+                            <span class="text-gray-400 italic">Belum ada lokasi/link</span>
                             @endif
                         </td>
-                        <td class="border px-3 py-2">
+                        <td class="px-4 py-2 text-center">
                             <button @click.prevent="editJadwal({{ $item->jadwal->id }})"
-                                class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-xs">
+                                class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs transition">
                                 Edit
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center text-gray-500 py-3">Tidak ada permintaan dijadwalkan.</td>
+                        <td colspan="7" class="text-center text-gray-500 py-4 italic">
+                            Tidak ada permintaan dijadwalkan.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
-                <div class="mt-4 mb-4">
-                    {{ $dijadwalkan->links('vendor.pagination.tailwind') }}
-                </div>
             </table>
+            <div class="p-4">
+                {{ $dijadwalkan->links('vendor.pagination.tailwind') }}
+            </div>
         </div>
     </section>
 
-    <section>
-        {{-- Permintaan Ditolak --}}
-        <h2 class="text-lg font-semibold text-rose-500 mt-8 mb-4">Permintaan Konsultasi Ditolak</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-200 rounded-lg mt-2">
-                <thead class="bg-rose-500 text-white text-sm text-sm">
+    {{-- === 4. Permintaan Konsultasi Ditolak === --}}
+    <section class="mt-12">
+        <div class="flex items-center gap-2 mb-5">
+            <div class="bg-rose-100 p-2 rounded-full">
+                <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856A2.062 2.062 0 0021 16.938V7.062A2.062 2.062 0 0018.938 5H5.062A2.062 2.062 0 003 7.062v9.876A2.062 2.062 0 005.062 19z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-semibold text-rose-600 tracking-wide">Permintaan Konsultasi Ditolak</h2>
+        </div>
+    
+        <div class="overflow-x-auto bg-white rounded-2xl shadow-md border border-gray-100">
+            <table class="min-w-full text-sm text-gray-700">
+                <thead class="bg-gradient-to-r from-rose-500 to-rose-600 text-white text-xs uppercase tracking-wide">
                     <tr>
-                        <th class="px-4 py-2 border">No</th>
-                        <th class="px-4 py-2 border">Topik</th>
-                        <th class="px-4 py-2 border">Tanggal</th>
-                        <th class="px-4 py-2 border">Status</th>
-                        <th class="px-4 py-2 border">Alasan</th>
+                        <th class="px-4 py-3 text-left">No</th>
+                        <th class="px-4 py-3 text-left">Topik</th>
+                        <th class="px-4 py-3 text-left">Tanggal</th>
+                        <th class="px-4 py-3 text-left">Status</th>
+                        <th class="px-4 py-3 text-left">Alasan</th>
                     </tr>
                 </thead>
-                <tbody class="text-sm">
+                <tbody class="divide-y divide-gray-100">
                     @forelse($ditolakList as $item)
-                    <tr class="hover:bg-gray-50 align-top">
-                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-2 border">{{ $item->topik->nama_topik }}</td>
-                        <td class="px-4 py-2 border">{{ $item->created_at->format('d F Y') }}</td>
-                        <td class="px-4 py-2 border">
-                            <span class="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-medium">Ditolak</span>
+                    <tr class="hover:bg-rose-50 transition">
+                        <td class="px-4 py-2 font-medium text-gray-600">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $item->topik->nama_topik }}</td>
+                        <td class="px-4 py-2">{{ $item->created_at->format('d M Y') }}</td>
+                        <td class="px-4 py-2">
+                            <span class="px-2.5 py-1 bg-rose-100 text-rose-700 rounded-full text-xs font-semibold">
+                                Ditolak
+                            </span>
                         </td>
-                        <td class="px-4 py-2 border">{{ $item->alasan_ditolak }}</td>
+                        <td class="px-4 py-2 text-gray-700">
+                            @if($item->alasan_ditolak)
+                            <span class="block">{{ $item->alasan_ditolak }}</span>
+                            @else
+                            <span class="text-gray-400 italic">Tidak ada keterangan</span>
+                            @endif
+                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-gray-500 py-4">Belum ada permintaan yang ditolak.</td>
+                        <td colspan="5" class="text-center text-gray-500 py-4 italic">
+                            Belum ada permintaan yang ditolak.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-            <div class="mt-4 mb-4">
+            <div class="p-4">
                 {{ $ditolakList->links('vendor.pagination.tailwind') }}
             </div>
         </div>
