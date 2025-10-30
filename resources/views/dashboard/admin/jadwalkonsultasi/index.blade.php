@@ -264,7 +264,7 @@
                 <div x-show="status === 'ditolak'" x-transition.opacity.200>
                     <label class="block mb-2 text-gray-700 font-medium">Alasan Penolakan</label>
                     <textarea name="alasan" rows="3" class="w-full border rounded p-2 mb-4"
-                        placeholder="Tuliskan alasan penolakan di sini..." required></textarea>
+                        placeholder="Tuliskan alasan penolakan di sini..."></textarea>
                 </div>
             
                 <div class="flex justify-end gap-2">
